@@ -17,6 +17,13 @@ from keiba.ev import (
 )
 from keiba.kelly import kelly_fraction, kelly_exclusive_outcomes
 from keiba.backtest import BacktestResult, backtest_win_bets
+from keiba.blend import blend_probabilities, fit_blend_weights
+from keiba.harville import (
+    exacta_probability,
+    quinella_probability,
+    trifecta_probability,
+    trio_probability,
+)
 
 __all__ = [
     "PAYOUT_RATE_JRA",
@@ -30,4 +37,10 @@ __all__ = [
     "kelly_exclusive_outcomes",
     "BacktestResult",
     "backtest_win_bets",
+    "blend_probabilities",
+    "fit_blend_weights",
+    "exacta_probability",
+    "quinella_probability",
+    "trifecta_probability",
+    "trio_probability",
 ]

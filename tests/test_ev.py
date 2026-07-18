@@ -23,6 +23,17 @@ def test_payout_rate_overrides():
     assert payout_rate("trifecta", organizer="nar", overrides={"trifecta": 0.70}) == 0.70
 
 
+def test_payout_rates_nar():
+    # 地方標準: 馬連75%・三連複72.5%(JRAより不利)
+    assert payout_rate("quinella", organizer="nar") == 0.750
+    assert payout_rate("trio", organizer="nar") == 0.725
+    # ホッカイドウ: ワイド80%、三連単70%
+    assert payout_rate("wide", organizer="hokkaido") == 0.800
+    assert payout_rate("trifecta", organizer="hokkaido") == 0.700
+    # 高知ファイナルレース三連単77%
+    assert payout_rate("trifecta", organizer="kochi_final_race") == 0.770
+
+
 def test_unknown_bet_type():
     with pytest.raises(KeyError):
         payout_rate("nope")
