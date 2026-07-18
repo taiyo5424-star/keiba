@@ -1,0 +1,74 @@
+{
+  "season": {
+    "start_date": "2026-06-17",
+    "end_date": "2026-12-31",
+    "timezone": "Asia/Tokyo"
+  },
+  "scope": {
+    "venues": [
+      "帯広ば",
+      "門別",
+      "盛岡",
+      "水沢",
+      "浦和",
+      "船橋",
+      "大井",
+      "川崎",
+      "金沢",
+      "笠松",
+      "名古屋",
+      "園田",
+      "姫路",
+      "高知",
+      "佐賀"
+    ],
+    "bet_types": ["win", "place", "wide", "quinella"],
+    "primary_bet_types": ["win", "place"],
+    "paper_bet_types": ["wide", "quinella"]
+  },
+  "risk": {
+    "bankroll": 10000,
+    "kelly_scale": 0.25,
+    "max_fraction_per_bet": 0.03,
+    "max_fraction_per_race": 0.05,
+    "max_fraction_per_day": 0.15,
+    "stake_unit": 100,
+    "min_ev_per_yen": 0.05,
+    "min_clv_target": 1.02
+  },
+  "betting_access": {
+    "primary_channel": "JRA_IPAT",
+    "purchase_device": "iPad",
+    "agent_places_bets": false,
+    "require_channel_availability": true,
+    "notes": "Monitor all NAR races, but mark real-money BUY only when the race is available through the user's JRA IPAT environment."
+  },
+  "paid_data_policy": {
+    "default_budget": "case_by_case",
+    "priority_order": [
+      "graded_or_high_stakes_races",
+      "minami_kanto_main_races",
+      "races_with_split_market_or_high_model_uncertainty",
+      "races_with_early_positive_ev_signal",
+      "ordinary_low_liquidity_races"
+    ],
+    "preferred_sources": [
+      "netkeiba_senmonshi",
+      "keiba_book",
+      "official_nar_data",
+      "vote_site_odds"
+    ]
+  },
+  "timing": {
+    "analysis_minutes_before_close": 10,
+    "odds_snapshot_minutes": [60, 30, 15, 10, 5],
+    "late_odds_drift_guard": 0.08
+  },
+  "quality_gates": {
+    "require_current_odds": true,
+    "require_nonfinal_odds": true,
+    "require_probability_source": true,
+    "minimum_confidence_for_real_money": "medium",
+    "paper_trade_when_confidence_below": "medium"
+  }
+}

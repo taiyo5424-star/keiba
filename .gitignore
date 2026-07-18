@@ -1,0 +1,14 @@
+# Large / regenerable data stays out of git (OneDrive already syncs the files themselves)
+data/
+outputs/
+installers/
+
+# Keep small, hand-maintained config and reference data tracked
+!data/README.md
+
+# OS / editor noise
+Thumbs.db
+Desktop.ini
+*.swp
+__pycache__/
+*.pyc

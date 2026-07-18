@@ -1,0 +1,35 @@
+{
+  "scope": "JRA central races, 2026",
+  "initial_stake_yen": 100,
+  "min_ev_per_yen": 0.20,
+  "min_condition_count": 500,
+  "min_condition_edge": 1.02,
+  "min_win_odds": 2.0,
+  "max_win_odds": 50.0,
+  "max_bets_per_race_initial": 1,
+  "max_race_bankroll_fraction": 0.003,
+  "max_daily_bankroll_fraction": 0.02,
+  "max_single_bet_bankroll_fraction": 0.001,
+  "requires_latest_odds": true,
+  "requires_no_abnormal_odds_market": true,
+  "requires_no_missing_race_conditions": true,
+  "requires_no_scratches_or_exclusions_uncertainty": true,
+  "same_day_bias": {
+    "enabled": true,
+    "required_for_live_analysis": true,
+    "min_completed_races": 2,
+    "min_completed_starters": 16,
+    "min_factor": 0.9,
+    "max_factor": 1.1,
+    "preferred_scope": "same_course_surface",
+    "fallback_scopes": ["same_course", "all_day"],
+    "gate_mode": "ev_adjustment_only",
+    "notes": "Use only completed same-day races before the target race post time. If the sample is too small, keep bias_factor neutral at 1.0 and report sample_too_small."
+  },
+  "allowed_bet_types_initial": ["win"],
+  "stop_conditions": {
+    "recent_100_bets_roi_below": 0.75,
+    "recent_200_bets_roi_below": 0.85,
+    "max_bankroll_drawdown_fraction": 0.10
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "bankroll": 10000,
+  "kelly_scale": 0.25,
+  "max_fraction_per_bet": 0.03,
+  "min_ev_per_yen": 0.05,
+  "stake_unit": 100
+}
