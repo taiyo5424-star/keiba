@@ -1,0 +1,28 @@
+[project]
+name = "keiba"
+version = "0.1.0"
+description = "中央競馬(JRA)・地方競馬(NAR)の期待値ベース馬券戦略のための分析ツールキット"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+]
+
+[project.optional-dependencies]
+ml = [
+    "scikit-learn>=1.3",
+    "lightgbm>=4.0",
+]
+dev = [
+    "pytest>=7.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
