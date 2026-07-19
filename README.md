@@ -14,14 +14,21 @@ docs/
   strategy.md       # リサーチに基づく戦略ドキュメント(本丸)
   data-sources.md   # データソースと収集設計のガイド
 src/keiba/
-  takeout.py        # 券種別払戻率(JRA/NAR)
+  takeout.py        # 券種別払戻率(JRA/NAR主催者別、公式値ベース)
   ev.py             # オッズ⇔確率変換・期待値計算・合成オッズ
   kelly.py          # ケリー基準(単一賭け・同一レース内複数賭けの陽解法)
+  blend.py          # Benter型ロジット結合(モデル確率×市場確率、α・β最尤推定)
+  harville.py       # 単勝確率→馬単/三連単等の確率(Harville公式+指数補正γ,δ)
   calibration.py    # 予測確率の較正評価(Brier・対数損失・信頼度曲線・ビン別回収率)
   backtest.py       # EV閾値+flat/kelly配分のバックテストエンジン
+  store.py          # SQLiteストア(レース・オッズ時系列・購入記録=税務対応)
+  features.py       # Point-in-Time特徴量生成(未来参照が構造的に不可能な設計)
+  model.py          # 条件付きロジット勝率モデル+時系列分割
+  win5.py           # WIN5/トリプル馬単のキャリーオーバー込み実効還元率・EV
 examples/
   demo_ev_analysis.py  # 1レースのEV分析とケリー配分のデモ
-tests/              # pytest(合成パリミュチュエル市場での挙動検証を含む)
+  pipeline_demo.py     # 格納→PIT特徴量→学習→結合→バックテストの全工程デモ
+tests/              # pytest(PIT性の直接検証・合成市場での挙動検証を含む)
 ```
 
 ## セットアップ
