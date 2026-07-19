@@ -180,10 +180,17 @@ Benterの収益は自己報告であり監査済みP&Lは無い。数値は1986�
 
 ### Phase 1: 勝率モデルと結合(src/keiba が対応)
 1. ベースライン: 市場確率そのもの(`ev.normalized_implied_probabilities`)。
-2. ファンダメンタルモデル f_i を構築(多項ロジット or LightGBM+ソフトマックス)。
+2. ファンダメンタルモデル f_i を構築(多項ロジット or LightGBM+ソフトマックス。
+   日本の公開実装ではLightGBM+lambdarankが主流 — [research/ml-implementations.md](research/ml-implementations.md))。
+   **特徴量は Point-in-Time で生成**(騎手勝率等の集計に未来を混ぜない)。
 3. `blend.fit_blend_weights` で α, β を推定。**α が有意に正でなければ賭けない**
    (モデルに市場超の情報が無い)。ΔlogL の大きさを監視。
+   公開事例でも Benter較正で α≈0.28 / β≈0.86 と市場側が支配的になる報告があり、
+   モデル単体でのEV計算がいかに危険かを裏付けている。
 4. `calibration.reliability_table` で較正確認。`roi_by_bin` でEVビン別回収率を確認。
+5. 公開の「回収率100%超」報告は確定オッズリーク・時系列リーク・サンプル不足・事後選択の
+   いずれかを含む例がほとんど(全て回避して長期フォワードテストで実証した公開事例は無い)。
+   自分のバックテストにも同じ監査を適用すること。
 
 ### Phase 2: バックテストと券種展開
 1. `backtest.backtest_win_bets` で単勝EV閾値戦略を時系列検証
@@ -211,11 +218,15 @@ Benterの収益は自己報告であり監査済みP&Lは無い。数値は1986�
 ~~2. 自動購入の規約上の可否~~ → 調査完了([research/automation-tos.md](research/automation-tos.md))
 ~~4. 雑所得認定の要件~~ → 調査完了([research/tax.md](research/tax.md))
 
+追加: MLの実装事例・商用AI・「回収率100%超」報告の信頼性評価 →
+調査完了([research/ml-implementations.md](research/ml-implementations.md))
+
 残る論点:
 1. ネット投票普及後(2010年代以降)の最新データでの券種別較正誤差
    — 三連単・WIN5のプロスペクト理論的歪みは搾取可能な規模か(自前データで検証すべき最重要仮説)。
 2. 兵庫の払戻率の公式一次確認、NARの券種別売上構成の年間集計。
 3. 小規模プールでの自己インパクトの実測(いくら賭けるとオッズが何%動くか)。
+4. Point-in-Time なデータ生成ETLの実装(バックテストの信頼性の土台)。
 
 ---
 
