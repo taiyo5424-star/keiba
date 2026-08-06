@@ -44,6 +44,54 @@ BET_TYPE_MAP = {
 }
 
 
+TODAY_TOP_URL = f"{BASE}/TodayRaceInfoTop"
+
+_MEETING_RE = re.compile(
+    r"RaceList\?k_raceDate=([^&\"'\s>]+)&(?:amp;)?k_babaCode=(\d+)"
+)
+_RACE_NO_RE = re.compile(
+    r"RaceMarkTable\?k_raceDate=[^&\"'\s>]+&(?:amp;)?k_raceNo=(\d+)&(?:amp;)?k_babaCode=\d+"
+)
+
+
+def parse_meetings(html: str) -> list[tuple[str, int]]:
+    """TodayRaceInfoTop から (日付 'YYYY/MM/DD', babaCode) の一覧を抽出する。
+
+    数日先の開催も含まれるため、呼び出し側で日付フィルタすること。
+    HTMLに引用符なしhref等の揺れがあるため正規表現で抽出する。
+    """
+    from urllib.parse import unquote
+
+    out = []
+    for enc_date, baba in _MEETING_RE.findall(html):
+        out.append((unquote(enc_date), int(baba)))
+    return sorted(set(out))
+
+
+def parse_race_numbers(html: str) -> list[int]:
+    """RaceList ページから成績(RaceMarkTable)リンクのあるレース番号を抽出。"""
+    return sorted({int(n) for n in _RACE_NO_RE.findall(html)})
+
+
+def race_list_url(date: str, baba_code: int) -> str:
+    return (
+        f"{BASE}/RaceList?k_raceDate={quote(date, safe='')}&k_babaCode={baba_code}"
+    )
+
+
+def fetch_meetings(date: str, min_interval: float = 2.0) -> list[tuple[str, int]]:
+    """指定日(YYYY/MM/DD)の開催 (date, babaCode) 一覧。"""
+    html = polite_get(TODAY_TOP_URL, min_interval).decode("utf-8", errors="replace")
+    return [(d, b) for d, b in parse_meetings(html) if d == date]
+
+
+def fetch_race_numbers(date: str, baba_code: int, min_interval: float = 2.0) -> list[int]:
+    html = polite_get(race_list_url(date, baba_code), min_interval).decode(
+        "utf-8", errors="replace"
+    )
+    return parse_race_numbers(html)
+
+
 def race_mark_table_url(date: str, race_no: int, baba_code: int) -> str:
     """date は 'YYYY/MM/DD'。"""
     return (
