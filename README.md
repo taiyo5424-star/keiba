@@ -7,11 +7,28 @@
 > 利益を保証するものではありません。控除率20〜30%の市場で長期プラスを
 > 出すのは統計的に極めて難しいことを前提に、余剰資金の範囲で運用してください。
 
+## クイックスタート
+
+```bash
+git clone https://github.com/taiyo5424-star/keiba.git && cd keiba
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+python -m pytest tests/ -q && keiba --help
+```
+
+ローカル移行・Codex CLIとの協業体制は [docs/local-setup.md](docs/local-setup.md)、
+週次PDCAの運用手順は [docs/operations.md](docs/operations.md)、
+AIエージェント向けの共通ガイドは [AGENTS.md](AGENTS.md) を参照。
+
 ## 構成
 
 ```
+AGENTS.md           # AIエージェント共通ガイド(Codex/Claude Code両対応)
 docs/
   strategy.md       # リサーチに基づく戦略ドキュメント(本丸)
+  operations.md     # 週次PDCA・意思決定ゲート・実弾移行条件
+  local-setup.md    # ローカル移行・Codex協業・実データ取得(Windows)
+  research/         # 敵対的検証済みリサーチ(NAR/税務/規約/ML事例)
   data-sources.md   # データソースと収集設計のガイド
 src/keiba/
   takeout.py        # 券種別払戻率(JRA/NAR主催者別、公式値ベース)
@@ -25,6 +42,10 @@ src/keiba/
   features.py       # Point-in-Time特徴量生成(未来参照が構造的に不可能な設計)
   model.py          # 条件付きロジット勝率モデル+時系列分割
   win5.py           # WIN5/トリプル馬単のキャリーオーバー込み実効還元率・EV
+  decision.py       # 発注決定(EV閾値+ケリー+1点/1レース上限+オッズ帯フィルタ)
+  execution.py      # 実行レイヤ(既定はペーパー。キルスイッチ・日次上限・重複防止)
+  cli.py            # keiba コマンド(ev/kelly/decide/win5/summary/test)
+  ingest/           # データ取り込み(NAR公式=成績払戻、楽天=式別票数。polite fetcher)
 examples/
   demo_ev_analysis.py  # 1レースのEV分析とケリー配分のデモ
   pipeline_demo.py     # 格納→PIT特徴量→学習→結合→バックテストの全工程デモ
