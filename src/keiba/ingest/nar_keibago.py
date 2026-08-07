@@ -68,6 +68,23 @@ def parse_meetings(html: str) -> list[tuple[str, int]]:
     return sorted(set(out))
 
 
+MONTHLY_URL = (
+    "https://www.keiba.go.jp/KeibaWeb/MonthlyConveneInfo/MonthlyConveneInfoTop"
+)
+
+
+def fetch_month_meetings(year: int, month: int, min_interval: float = 2.0) -> list[tuple[str, int]]:
+    """月間開催カレンダーから当月の (日付 'YYYY/MM/DD', babaCode) 一覧を得る。
+
+    過去月も取得できる(2025年以前も可)。成績ページのオッズ欄は
+    概ね直近4〜6ヶ月のみ保持される点に注意(2026-08実測)。
+    """
+    html = polite_get(
+        f"{MONTHLY_URL}?k_year={year}&k_month={month}", min_interval
+    ).decode("utf-8", errors="replace")
+    return parse_meetings(html)
+
+
 def parse_race_numbers(html: str) -> list[int]:
     """RaceList ページから成績(RaceMarkTable)リンクのあるレース番号を抽出。"""
     return sorted({int(n) for n in _RACE_NO_RE.findall(html)})
